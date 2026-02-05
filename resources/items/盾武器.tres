@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemWeapon" format=3 uid="uid://xc7qrkvhgc3h"]
+
+[ext_resource type="Script" uid="uid://dw6b2s7xwdq28" path="res://scripts/item/item_weapon.gd" id="1_m5co2"]
+[ext_resource type="Texture2D" uid="uid://ckuhi7unowvsq" path="res://assets/盾.png" id="2_k8bke"]
+
+[resource]
+script = ExtResource("1_m5co2")
+item_id = "shield"
+name = "盾"
+texture = ExtResource("2_k8bke")
+item_type = 1
+description = "一把防御武器"
+metadata/_custom_type_script = "uid://dw6b2s7xwdq28"

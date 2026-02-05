@@ -10,18 +10,21 @@ config_version=5
 
 [application]
 
-config/name="BagSystem"
+config/name="InventorySystem"
 run/main_scene="uid://dc2inl7kfdvp3"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
-GlobalVariable="*uid://btqxqqid1mwln"
+Global="*uid://btqxqqid1mwln"
+ItemFactory="*uid://d4fadcga6oepo"
 
 [display]
 
-window/stretch/scale=3.64
+window/stretch/mode="viewport"
+window/stretch/aspect="expand"
+window/stretch/scale=2.0
 
 [input]
 

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemWeapon" format=3 uid="uid://br6nf86xq4o1l"]
+
+[ext_resource type="Script" uid="uid://dw6b2s7xwdq28" path="res://scripts/item/item_weapon.gd" id="1_av5ej"]
+[ext_resource type="Texture2D" uid="uid://csn757ssur84" path="res://assets/斧.png" id="2_3vey4"]
+
+[resource]
+script = ExtResource("1_av5ej")
+item_id = "axe"
+name = "斧头"
+texture = ExtResource("2_3vey4")
+item_type = 1
+description = "一把伤害高的武器"
+metadata/_custom_type_script = "uid://dw6b2s7xwdq28"
