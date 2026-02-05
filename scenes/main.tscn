@@ -100,7 +100,20 @@ theme = SubResource("Theme_85g3d")
 theme_override_font_sizes/font_size = 50
 text = "清空背包"
 
+[node name="UpgradeButton" type="Button" parent="." unique_id=98754355]
+layout_mode = 0
+offset_left = 289.00003
+offset_top = 242.00002
+offset_right = 589.0
+offset_bottom = 342.0
+scale = Vector2(0.29631907, 0.22089739)
+focus_mode = 0
+theme = SubResource("Theme_85g3d")
+theme_override_font_sizes/font_size = 50
+text = "升级背包"
+
 [connection signal="pressed" from="SaveButton" to="BackPack" method="save_"]
 [connection signal="pressed" from="GenButton" to="BackPack" method="pickup_item_"]
 [connection signal="pressed" from="LoadButton" to="BackPack" method="load_"]
 [connection signal="pressed" from="ClearButton" to="BackPack" method="clear_"]
+[connection signal="pressed" from="UpgradeButton" to="BackPack" method="upgrade_"]

@@ -1,93 +1,99 @@
-[gd_resource type="Resource" script_class="BackpackSaveData" format=3]
+[gd_resource type="Resource" script_class="BackpackData" format=3]
 
 [ext_resource type="Script" path="res://scripts/item/item_base.gd" id="1_rlh6u"]
 [ext_resource type="Script" path="res://scripts/item/in_backpack_attr.gd" id="2_cx804"]
 [ext_resource type="Script" path="res://scripts/item/item_weapon.gd" id="3_qvigv"]
-[ext_resource type="Texture2D" path="res://assets/斧.png" id="4_6wtye"]
-[ext_resource type="Script" path="res://scripts/item/item_consumable.gd" id="6_cx804"]
-[ext_resource type="Texture2D" path="res://assets/药水.png" id="7_qvigv"]
-[ext_resource type="Script" path="res://scripts/item/backpack_save_data.gd" id="8_fiy54"]
-
-[sub_resource type="Resource" id="Resource_jehlm"]
-script = ExtResource("2_cx804")
-is_placed = true
-stack_count = 1
+[ext_resource type="Texture2D" path="res://assets/盾.png" id="4_6wtye"]
+[ext_resource type="Script" path="res://scripts/item/item_consumable.gd" id="5_nmymu"]
+[ext_resource type="Texture2D" path="res://assets/药水.png" id="6_1s8ds"]
+[ext_resource type="Texture2D" path="res://assets/斧.png" id="7_j238d"]
+[ext_resource type="Script" path="res://scripts/item/backpack_data.gd" id="8_fiy54"]
 
 [sub_resource type="Resource" id="Resource_rlh6u"]
-script = ExtResource("6_cx804")
-item_id = "medicine"
-name = "药水"
-texture = ExtResource("7_qvigv")
-item_type = 2
-description = "恢复少量生命值"
-in_backpack_attr = SubResource("Resource_jehlm")
-metadata/_custom_type_script = "uid://bn33tpr4xnmc1"
-
-[sub_resource type="Resource" id="Resource_cx804"]
 script = ExtResource("2_cx804")
-slot_idx = 1
+slot_idx = 3
 is_placed = true
+rotate_degree = 90
 stack_count = 1
 
-[sub_resource type="Resource" id="Resource_qvigv"]
-script = ExtResource("6_cx804")
-item_id = "medicine"
-name = "药水"
-texture = ExtResource("7_qvigv")
-item_type = 2
-description = "恢复少量生命值"
-in_backpack_attr = SubResource("Resource_cx804")
-metadata/_custom_type_script = "uid://bn33tpr4xnmc1"
+[sub_resource type="Resource" id="Resource_cx804"]
+script = ExtResource("3_qvigv")
+item_id = "shield"
+name = "盾"
+texture = ExtResource("4_6wtye")
+item_type = 1
+description = "一把防御武器"
+in_backpack_attr = SubResource("Resource_rlh6u")
+metadata/_custom_type_script = "uid://dw6b2s7xwdq28"
 
-[sub_resource type="Resource" id="Resource_6wtye"]
+[sub_resource type="Resource" id="Resource_qvigv"]
 script = ExtResource("2_cx804")
 slot_idx = 2
 is_placed = true
 stack_count = 1
 
-[sub_resource type="Resource" id="Resource_nmymu"]
-script = ExtResource("3_qvigv")
-item_id = "axe"
-name = "斧头"
-texture = ExtResource("4_6wtye")
-item_type = 1
-description = "一把伤害高的武器"
-in_backpack_attr = SubResource("Resource_6wtye")
-metadata/_custom_type_script = "uid://dw6b2s7xwdq28"
-
-[sub_resource type="Resource" id="Resource_1s8ds"]
-script = ExtResource("2_cx804")
-slot_idx = 4
-is_placed = true
-stack_count = 1
-
-[sub_resource type="Resource" id="Resource_j238d"]
-script = ExtResource("3_qvigv")
-item_id = "axe"
-name = "斧头"
-texture = ExtResource("4_6wtye")
-item_type = 1
-description = "一把伤害高的武器"
-in_backpack_attr = SubResource("Resource_1s8ds")
-metadata/_custom_type_script = "uid://dw6b2s7xwdq28"
-
-[sub_resource type="Resource" id="Resource_fiy54"]
-script = ExtResource("2_cx804")
-slot_idx = 6
-is_placed = true
-stack_count = 1
-
-[sub_resource type="Resource" id="Resource_5k48q"]
-script = ExtResource("6_cx804")
+[sub_resource type="Resource" id="Resource_6wtye"]
+script = ExtResource("5_nmymu")
 item_id = "medicine"
 name = "药水"
-texture = ExtResource("7_qvigv")
+texture = ExtResource("6_1s8ds")
 item_type = 2
 description = "恢复少量生命值"
-in_backpack_attr = SubResource("Resource_fiy54")
+in_backpack_attr = SubResource("Resource_qvigv")
 metadata/_custom_type_script = "uid://bn33tpr4xnmc1"
+
+[sub_resource type="Resource" id="Resource_nmymu"]
+script = ExtResource("2_cx804")
+slot_idx = 40
+is_placed = true
+rotate_degree = 180
+stack_count = 1
+
+[sub_resource type="Resource" id="Resource_1s8ds"]
+script = ExtResource("3_qvigv")
+item_id = "axe"
+name = "斧头"
+texture = ExtResource("7_j238d")
+item_type = 1
+description = "一把伤害高的武器"
+in_backpack_attr = SubResource("Resource_nmymu")
+metadata/_custom_type_script = "uid://dw6b2s7xwdq28"
+
+[sub_resource type="Resource" id="Resource_j238d"]
+script = ExtResource("2_cx804")
+slot_idx = 7
+is_placed = true
+rotate_degree = 180
+stack_count = 1
+
+[sub_resource type="Resource" id="Resource_fiy54"]
+script = ExtResource("3_qvigv")
+item_id = "axe"
+name = "斧头"
+texture = ExtResource("7_j238d")
+item_type = 1
+description = "一把伤害高的武器"
+in_backpack_attr = SubResource("Resource_j238d")
+metadata/_custom_type_script = "uid://dw6b2s7xwdq28"
+
+[sub_resource type="Resource" id="Resource_5k48q"]
+script = ExtResource("2_cx804")
+slot_idx = 37
+is_placed = true
+rotate_degree = 180
+stack_count = 1
+
+[sub_resource type="Resource" id="Resource_mw2ow"]
+script = ExtResource("3_qvigv")
+item_id = "shield"
+name = "盾"
+texture = ExtResource("4_6wtye")
+item_type = 1
+description = "一把防御武器"
+in_backpack_attr = SubResource("Resource_5k48q")
+metadata/_custom_type_script = "uid://dw6b2s7xwdq28"
 
 [resource]
 script = ExtResource("8_fiy54")
-grid_level = 1
-item_datas = Array[ExtResource("1_rlh6u")]([SubResource("Resource_rlh6u"), SubResource("Resource_qvigv"), SubResource("Resource_nmymu"), SubResource("Resource_j238d"), SubResource("Resource_5k48q")])
+level = 2
+item_datas = Array[ExtResource("1_rlh6u")]([SubResource("Resource_cx804"), SubResource("Resource_6wtye"), SubResource("Resource_1s8ds"), SubResource("Resource_fiy54"), SubResource("Resource_mw2ow")])
