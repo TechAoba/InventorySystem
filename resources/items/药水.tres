@@ -1,7 +1,12 @@
 [gd_resource type="Resource" script_class="ItemConsumable" format=3 uid="uid://bt2k6vc817nes"]
 
+[ext_resource type="Script" uid="uid://bi0d4closxmu" path="res://scripts/item/in_backpack_attr.gd" id="1_7i8c4"]
 [ext_resource type="Script" uid="uid://bn33tpr4xnmc1" path="res://scripts/item/item_consumable.gd" id="1_c77cl"]
 [ext_resource type="Texture2D" uid="uid://d0aioe4k73ire" path="res://assets/药水.png" id="2_ox2fi"]
+
+[sub_resource type="Resource" id="Resource_6q33j"]
+script = ExtResource("1_7i8c4")
+metadata/_custom_type_script = "uid://bi0d4closxmu"
 
 [resource]
 script = ExtResource("1_c77cl")
@@ -10,4 +15,5 @@ name = "药水"
 texture = ExtResource("2_ox2fi")
 item_type = 2
 description = "恢复少量生命值"
+in_backpack_attr = SubResource("Resource_6q33j")
 metadata/_custom_type_script = "uid://bn33tpr4xnmc1"

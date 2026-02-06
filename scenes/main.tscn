@@ -52,8 +52,9 @@ theme_override_constants/v_separation = 0
 script = ExtResource("1_o5qli")
 metadata/_edit_lock_ = true
 
-[node name="SaveButton" type="Button" parent="." unique_id=804231669]
-layout_mode = 0
+[node name="Buttons" type="Node" parent="." unique_id=1551486483]
+
+[node name="SaveButton" type="Button" parent="Buttons" unique_id=804231669]
 offset_left = 42.0
 offset_top = 240.0
 offset_right = 342.0
@@ -64,8 +65,7 @@ theme = SubResource("Theme_85g3d")
 theme_override_font_sizes/font_size = 50
 text = "保存"
 
-[node name="GenButton" type="Button" parent="." unique_id=1472422918]
-layout_mode = 0
+[node name="GenButton" type="Button" parent="Buttons" unique_id=1472422918]
 offset_left = 42.000004
 offset_top = 278.0
 offset_right = 342.0
@@ -76,8 +76,7 @@ theme = SubResource("Theme_85g3d")
 theme_override_font_sizes/font_size = 50
 text = "获取物品"
 
-[node name="LoadButton" type="Button" parent="." unique_id=1386317092]
-layout_mode = 0
+[node name="LoadButton" type="Button" parent="Buttons" unique_id=1386317092]
 offset_left = 168.00002
 offset_top = 240.99998
 offset_right = 468.0
@@ -88,8 +87,7 @@ theme = SubResource("Theme_85g3d")
 theme_override_font_sizes/font_size = 50
 text = "加载"
 
-[node name="ClearButton" type="Button" parent="." unique_id=918241934]
-layout_mode = 0
+[node name="ClearButton" type="Button" parent="Buttons" unique_id=918241934]
 offset_left = 169.0
 offset_top = 279.0
 offset_right = 469.0
@@ -100,8 +98,7 @@ theme = SubResource("Theme_85g3d")
 theme_override_font_sizes/font_size = 50
 text = "清空背包"
 
-[node name="UpgradeButton" type="Button" parent="." unique_id=98754355]
-layout_mode = 0
+[node name="UpgradeButton" type="Button" parent="Buttons" unique_id=98754355]
 offset_left = 289.00003
 offset_top = 242.00002
 offset_right = 589.0
@@ -112,8 +109,8 @@ theme = SubResource("Theme_85g3d")
 theme_override_font_sizes/font_size = 50
 text = "升级背包"
 
-[connection signal="pressed" from="SaveButton" to="BackPack" method="save_"]
-[connection signal="pressed" from="GenButton" to="BackPack" method="pickup_item_"]
-[connection signal="pressed" from="LoadButton" to="BackPack" method="load_"]
-[connection signal="pressed" from="ClearButton" to="BackPack" method="clear_"]
-[connection signal="pressed" from="UpgradeButton" to="BackPack" method="upgrade_"]
+[connection signal="pressed" from="Buttons/SaveButton" to="BackPack" method="save_"]
+[connection signal="pressed" from="Buttons/GenButton" to="BackPack" method="pickup_item_"]
+[connection signal="pressed" from="Buttons/LoadButton" to="BackPack" method="load_"]
+[connection signal="pressed" from="Buttons/ClearButton" to="BackPack" method="clear_"]
+[connection signal="pressed" from="Buttons/UpgradeButton" to="BackPack" method="upgrade_"]

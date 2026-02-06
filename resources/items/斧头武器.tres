@@ -1,7 +1,12 @@
 [gd_resource type="Resource" script_class="ItemWeapon" format=3 uid="uid://br6nf86xq4o1l"]
 
+[ext_resource type="Script" uid="uid://bi0d4closxmu" path="res://scripts/item/in_backpack_attr.gd" id="1_3vey4"]
 [ext_resource type="Script" uid="uid://dw6b2s7xwdq28" path="res://scripts/item/item_weapon.gd" id="1_av5ej"]
 [ext_resource type="Texture2D" uid="uid://csn757ssur84" path="res://assets/斧.png" id="2_3vey4"]
+
+[sub_resource type="Resource" id="Resource_dihc1"]
+script = ExtResource("1_3vey4")
+metadata/_custom_type_script = "uid://bi0d4closxmu"
 
 [resource]
 script = ExtResource("1_av5ej")
@@ -10,4 +15,5 @@ name = "斧头"
 texture = ExtResource("2_3vey4")
 item_type = 1
 description = "一把伤害高的武器"
+in_backpack_attr = SubResource("Resource_dihc1")
 metadata/_custom_type_script = "uid://dw6b2s7xwdq28"

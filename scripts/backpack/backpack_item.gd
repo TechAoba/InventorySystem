@@ -1,8 +1,12 @@
 class_name BackpackItem extends Sprite2D
 
+@onready var color_rect: ColorRect = %ColorRect
+
 var data: ItemBase = null
 var is_picked: bool = false
 var grid_position: Vector2
+
+const BgColor := Color("#121214CC")
 
 var size: Vector2:
 	get():
@@ -12,9 +16,13 @@ var anchor_point: Vector2:
 	get():
 		return global_position - size / 2
 
+
 func _ready() -> void:
+	z_index = 1
 	if data:
 		texture = data.texture
+		color_rect.size = texture.get_size()
+		color_rect.position = -color_rect.size / 2
 
 
 func _process(delta: float) -> void:
@@ -42,7 +50,7 @@ func get_placed(mousePos: Vector2, slot_idx: int) -> void:
 	data.in_backpack_attr.slot_idx = slot_idx
 	data.in_backpack_attr.is_placed = true
 	is_picked = false
-	z_index = 0
+	z_index = 1
 	set_pos(mousePos)
 	remove_from_group("held_item")
 
@@ -68,7 +76,7 @@ func _input(event: InputEvent) -> void:
 func do_rotation() -> void:
 	var rotate_digree: int = data.rotate()
 	var tween = create_tween()
-	tween.tween_property(self, "rotation_degrees", rotate_digree, 0.1)
+	tween.tween_property(self, "rotation_degrees", rotate_digree, 0.05)
 	
 	# 限制角度范围在[0, 360)
 	tween.finished.connect(func():

@@ -4,3 +4,12 @@
 
 [node name="InventoryItem" type="Sprite2D" unique_id=349422771]
 script = ExtResource("1_u4rwp")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2108226653]
+unique_name_in_owner = true
+z_index = -1
+custom_minimum_size = Vector2(32, 32)
+offset_right = 32.0
+offset_bottom = 32.0
+mouse_filter = 2
+color = Color(0.07058824, 0.07058824, 0.078431375, 0.8)
