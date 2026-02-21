@@ -18,6 +18,8 @@ var anchor_point: Vector2:
 
 
 func _ready() -> void:
+	color_rect.color = BgColor
+	color_rect.z_index = -1
 	z_index = 1
 	if data:
 		texture = data.texture
@@ -74,11 +76,23 @@ func _input(event: InputEvent) -> void:
 
 
 func do_rotation() -> void:
-	var rotate_digree: int = data.rotate()
+	var rotate_degree: int = data.rotate()
 	var tween = create_tween()
-	tween.tween_property(self, "rotation_degrees", rotate_digree, 0.05)
+	tween.tween_property(self, "rotation_degrees", rotate_degree, 0.05)
 	
 	# 限制角度范围在[0, 360)
 	tween.finished.connect(func():
-		rotation_degrees = rotate_digree % 360
+		rotation_degrees = rotate_degree % 360
 	)
+
+
+func do_move(target_position: Vector2 = Vector2i(0, 0), rotate_degree: int = 0) -> void:
+	# 移动动画
+	target_position += size / 2
+	var move_tween = create_tween()
+	move_tween.tween_property(self, "global_position", target_position, 0.05)
+	
+	# 旋转动画
+	var rotate_tween = create_tween()
+	rotate_tween.tween_property(self, "rotation_degrees", rotate_degree, 0.05)
+	

@@ -8,10 +8,10 @@ const GridSize: int = 32
 const max_backpack_level: int = 4
 # 每一等级背包格子数量
 const backpack_level_size: Array[Vector2i] = [
-	Vector2i(10, 6),
-	Vector2i(11, 7),
-	Vector2i(12, 8),
-	Vector2i(15, 8),
+	Vector2i(10, 6),		# 60
+	Vector2i(11, 7),		# 77
+	Vector2i(12, 8),		# 96
+	Vector2i(15, 8),		# 120
 ]
 # 背包每一级价格
 const backpack_upgrade_price: Array[int] = [0, 24000, 40000, 73000]

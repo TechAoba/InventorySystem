@@ -7,17 +7,19 @@ const SAVE_PATH = "user://backpack_save.tres"
 const backpack_item_scene: PackedScene = preload("res://scenes/backpack_item.tscn")
 
 ## 物品实例数组
-var backpack_items: Array[Node] = []
+var backpack_items: Array[BackpackItem] = []
 var data: BackpackData
+## 背包整理器
+var packer: BinManager = null
 
 
 func _ready() -> void:
 	data = BackpackData.new()
-	# 通过背包等级设置格子数量
-	var backpack_size: Vector2i = Global.get_backpack_size(data.level)
+	# 背包格子数量
+	var backpack_size: Vector2i = data.get_backpack_size()
 	item_grid.init_slot_data(backpack_size)
 	load_()
-
+	
 
 ## 保存数据
 func save_() -> bool:
@@ -32,6 +34,7 @@ func save_() -> bool:
 
 ## 加载背包数据
 func load_() -> void:
+	var raw_data = ResourceLoader.load(SAVE_PATH) as BackpackData
 	if not FileAccess.file_exists(SAVE_PATH):
 		print("游戏存档不存在： ", SAVE_PATH)
 		return
@@ -114,3 +117,34 @@ func upgrade_() -> void:
 	# 4. 将物品放置背包
 	for backpack_item in backpack_items:
 		var grid_index: int = item_grid.attempt_to_add_item_data(backpack_item)
+
+
+func pack_backpack_() -> void:
+	# 根据背包大小判断整理器是否要重新声明
+	var backpack_size: Vector2i = data.get_backpack_size()
+	if packer == null or packer.bin_width != backpack_size.x or packer.bin_height != backpack_size.y:
+		packer = BinManager.new(backpack_size.x, backpack_size.y)
+	packer.clear()
+	
+	packer.add_items(items)
+	packer.execute()
+	# 没有不能放置的物品，成功整理
+	if len(packer.unplaced_items) == 0:
+		items = packer.placed_items
+		item_grid.move_item_by_packer()
+	# 将物品放置在 packer 分配的位置
+	#items = packer.placed_items.duplicate(true)
+	#for item in items:
+		#item.
+	
+	#print("backpack items:")
+	#for item in item_grid.items:
+		#print(item.data.position_in_backpack())
+	#print("unplaced items:")
+	#for item in packer.unplaced_items:
+		#print(item.position_in_backpack())
+
+func _input(event: InputEvent) -> void:
+	# 按下 R 键出发整理背包
+	if event is InputEventKey and Input.is_action_just_pressed("pack"):
+		pack_backpack_()

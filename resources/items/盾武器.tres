@@ -1,12 +1,12 @@
 [gd_resource type="Resource" script_class="ItemWeapon" format=3 uid="uid://xc7qrkvhgc3h"]
 
-[ext_resource type="Script" uid="uid://bi0d4closxmu" path="res://scripts/item/in_backpack_attr.gd" id="1_4w87a"]
+[ext_resource type="Script" uid="uid://c56jbkdvxla8y" path="res://scripts/backpack/in_backpack_attr.gd" id="1_4w87a"]
 [ext_resource type="Script" uid="uid://dw6b2s7xwdq28" path="res://scripts/item/item_weapon.gd" id="1_m5co2"]
 [ext_resource type="Texture2D" uid="uid://ckuhi7unowvsq" path="res://assets/盾.png" id="2_k8bke"]
 
 [sub_resource type="Resource" id="Resource_ikwjs"]
 script = ExtResource("1_4w87a")
-metadata/_custom_type_script = "uid://bi0d4closxmu"
+metadata/_custom_type_script = "uid://c56jbkdvxla8y"
 
 [resource]
 script = ExtResource("1_m5co2")

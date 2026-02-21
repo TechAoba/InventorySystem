@@ -1,13 +1,13 @@
 [gd_resource type="Resource" script_class="BackpackData" format=3]
 
-[ext_resource type="Script" path="res://scripts/item/item_base.gd" id="1_rlh6u"]
-[ext_resource type="Script" path="res://scripts/item/in_backpack_attr.gd" id="2_cx804"]
-[ext_resource type="Script" path="res://scripts/item/item_weapon.gd" id="3_qvigv"]
-[ext_resource type="Texture2D" path="res://assets/盾.png" id="4_6wtye"]
-[ext_resource type="Script" path="res://scripts/item/item_consumable.gd" id="5_nmymu"]
-[ext_resource type="Texture2D" path="res://assets/药水.png" id="6_1s8ds"]
-[ext_resource type="Texture2D" path="res://assets/斧.png" id="7_j238d"]
-[ext_resource type="Script" path="res://scripts/item/backpack_data.gd" id="8_fiy54"]
+[ext_resource type="Script" uid="uid://clkio5ivv5at" path="res://scripts/item/item_base.gd" id="1_rlh6u"]
+[ext_resource type="Script" uid="uid://bi0d4closxmu" path="res://scripts/item/item.gd" id="2_cx804"]
+[ext_resource type="Script" uid="uid://dw6b2s7xwdq28" path="res://scripts/item/item_weapon.gd" id="3_qvigv"]
+[ext_resource type="Texture2D" uid="uid://ckuhi7unowvsq" path="res://assets/盾.png" id="4_6wtye"]
+[ext_resource type="Script" uid="uid://bn33tpr4xnmc1" path="res://scripts/item/item_consumable.gd" id="5_nmymu"]
+[ext_resource type="Texture2D" uid="uid://d0aioe4k73ire" path="res://assets/药水.png" id="6_1s8ds"]
+[ext_resource type="Texture2D" uid="uid://csn757ssur84" path="res://assets/斧.png" id="7_j238d"]
+[ext_resource type="Script" uid="uid://dhsdsddh70lxp" path="res://scripts/item/backpack_data.gd" id="8_fiy54"]
 
 [sub_resource type="Resource" id="Resource_rlh6u"]
 script = ExtResource("2_cx804")

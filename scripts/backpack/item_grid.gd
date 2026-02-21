@@ -4,6 +4,7 @@ const SLOT_SIZE: int = Global.GridSize
 const backpack_slot_scene: PackedScene = preload("res://scenes/backpack_slot.tscn")
 var dimentions: Vector2i = Vector2i(10, 6)
 var slot_datas: Array[BackpackItem] = []
+var items: Array[BackpackItem] = []
 
 func _ready() -> void:
 	#init_slot_data()
@@ -14,6 +15,7 @@ func init_slot_data(dim: Vector2i = dimentions) -> void:
 	slot_datas.resize(dim.x * dim.y)
 	reset_slots_()
 	slot_datas.fill(null)
+	items.clear()
 
 ## 设置格子尺寸
 func reset_slots_() -> void:
@@ -66,10 +68,12 @@ func remove_item_from_slot_data(item: Node) -> void:
 		if slot_datas[i] == item:
 			slot_datas[i] = null
 
-func add_item_to_slot_data(index: int, item: Node) -> void:
+func add_item_to_slot_data(index: int, item: BackpackItem) -> void:
+	#print("add to: ", index)
 	for y in item.data.dimentions.y:
 		for x in item.data.dimentions.x:
 			slot_datas[index + x + y * columns] = item
+	item.data.in_backpack_attr.slot_idx = index
 
 func items_in_area(index: int, item_dimentions: Vector2i) -> Array:
 	var items: Dictionary = {}
@@ -120,9 +124,8 @@ func attempt_to_add_item_data(item: BackpackItem) -> int:
 			slot_index = -1
 	# 当存在格子放置物品时，真正放置物品
 	if slot_index >= 0:
-		for y in item.data.dimentions.y:
-			for x in item.data.dimentions.x:
-				slot_datas[slot_index + x + y * columns] = item
+		items.append(item)
+		add_item_to_slot_data(slot_index, item)
 		item.data.in_backpack_attr.is_placed = true
 		item.data.in_backpack_attr.slot_idx = slot_index
 		item.set_init_position(get_coords_from_slot_index(slot_index))
@@ -152,3 +155,18 @@ func is_in_border(index: int, rect: Vector2i) -> bool:
 	if start_x + rect.x > dimentions.x or start_y + rect.y > dimentions.y:
 		return false
 	return true
+
+
+## 一键整理背包后，根据物品的坐标。移动物品到正确的位置
+func move_item_by_packer() -> void:
+	# 1. 清理 slot 上的 item 引用
+	for i in slot_datas.size():
+		slot_datas[i] = null
+	for item in items:
+		# 2. 物品根据新放置在 slot 中
+		var slot_idx: int = columns * item.data.in_backpack_attr.y + item.data.in_backpack_attr.x
+		add_item_to_slot_data(slot_idx, item)
+		# 3. 计算物品的绝对位置并移动到对应位置
+		var target_position: Vector2 = get_coords_from_slot_index(slot_idx)
+		item.do_move(target_position, item.data.in_backpack_attr.rotate_degree)
+	
