@@ -86,10 +86,13 @@ func pickup_item_() -> void:
 	add_child(backpack_item)
 	var grid_index: int = item_grid.attempt_to_add_item_data(backpack_item)
 	if grid_index < 0:
-		printerr("物品放置失败！")
-		backpack_items.pop_back()
-		backpack_item.queue_free()
-	else:
+		backpack_item.data.in_backpack_attr.rotate()
+		grid_index = item_grid.attempt_to_add_item_data(backpack_item)
+		if grid_index < 0:
+			printerr("物品放置失败！")
+			backpack_items.pop_back()
+			backpack_item.queue_free()
+	if grid_index >= 0:
 		items.append(item_data)
 
 

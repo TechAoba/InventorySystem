@@ -54,7 +54,6 @@ func rotate() -> int:
 ## [b]强制要求物品尺寸能被格子size整除[/b]
 var dimentions: Vector2i:
 	get():
-		var item_size := Vector2i(texture.get_width(), texture.get_height())
 		return in_backpack_attr.get_dimention_in_backpack()
 
 

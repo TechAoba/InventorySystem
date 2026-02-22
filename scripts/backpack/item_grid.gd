@@ -116,12 +116,22 @@ func attempt_to_add_item_data(item: BackpackItem) -> int:
 		slot_index = item.data.in_backpack_attr.slot_idx
 	# 2. 不在背包中
 	else:
+		# 首先尝试不旋转物品
 		while slot_index < slot_datas.size():
 			if item_fits(slot_index, item.data.dimentions):
 				break
 			slot_index += 1
-		if slot_index >= slot_datas.size():
-			slot_index = -1
+		## 不旋转物品无法放置，则尝试旋转放置
+		#if slot_index >= slot_datas.size():
+			#slot_index = 0
+			#while slot_index < slot_datas.size():
+				#if item_fits(slot_index, item.data.dimentions, true):
+					#break
+				#slot_index += 1
+			#if slot_index >= slot_datas.size():
+				#slot_index = -1
+	if slot_index >= slot_datas.size():
+		slot_index = -1
 	# 当存在格子放置物品时，真正放置物品
 	if slot_index >= 0:
 		items.append(item)
@@ -134,7 +144,7 @@ func attempt_to_add_item_data(item: BackpackItem) -> int:
 
 ## 检查物品能否放置在特定位置 [br]
 ## index: 物品左上角的编号。rect： 物品的尺寸 Vector2i
-func item_fits(index: int, rect: Vector2i) -> bool:
+func item_fits(index: int, rect: Vector2i, do_rotation: bool = false) -> bool:
 	if !is_in_border(index, rect):
 		return false
 	for y in rect.y:
