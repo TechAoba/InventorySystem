@@ -1,6 +1,10 @@
-class_name BackpackItem extends Sprite2D
+class_name BackpackItem extends Control
 
+@onready var item_control: Control = %ItemControl
 @onready var color_rect: ColorRect = %ColorRect
+@onready var count_label: Label = %CountLabel
+@onready var texture_rect: TextureRect = %TextureRect
+
 
 var data: ItemBase = null
 var is_picked: bool = false
@@ -8,13 +12,13 @@ var grid_position: Vector2
 
 const BgColor := Color("#121214CC")
 
-var size: Vector2:
+var xy: Vector2:
 	get():
 		return Vector2(data.dimentions.x, data.dimentions.y) * Global.GridSize
 
 var anchor_point: Vector2:
 	get():
-		return global_position - size / 2
+		return global_position - xy / 2
 
 
 func _ready() -> void:
@@ -22,21 +26,27 @@ func _ready() -> void:
 	color_rect.z_index = -1
 	z_index = 1
 	if data:
-		texture = data.texture
-		color_rect.size = texture.get_size()
-		color_rect.position = -color_rect.size / 2
+		texture_rect.texture = data.texture
+		color_rect.size = data.texture.get_size()
+		color_rect.position = -xy / 2
+		#item_control.size = data.texture.get_size()
+		# 渲染物品数量
+		count_label.visible = data.is_stackable()
 
 
 func _process(delta: float) -> void:
 	if is_picked:
 		var pos := get_global_mouse_position()
 		set_pos(pos)
-
+	if data:
+		count_label.text = str(data.in_backpack_attr.stack_count)
+		#var yx := Vector2(xy.y, xy.y)
+		color_rect.position = -xy / 2
 
 # global_position为物体中心点，锚点anchor_point为物体左上角
 func set_init_position(anchor_pos: Vector2) -> void:
-	rotation_degrees = data.in_backpack_attr.rotate_degree
-	global_position = anchor_pos + size / 2
+	item_control.rotation_degrees = data.in_backpack_attr.rotate_degree
+	global_position = anchor_pos + xy / 2
 
 
 func get_picked_up(grid_position: Vector2) -> void:
@@ -44,6 +54,7 @@ func get_picked_up(grid_position: Vector2) -> void:
 	add_to_group("held_item")
 	is_picked = true
 	z_index = 10
+	Global.something_pickup = true
 
 
 ## 放置物品 [br]
@@ -55,6 +66,7 @@ func get_placed(mousePos: Vector2, slot_idx: int) -> void:
 	z_index = 1
 	set_pos(mousePos)
 	remove_from_group("held_item")
+	Global.something_pickup = false
 
 
 ## 设置物品位置，包含吸附功能 [br]
@@ -64,9 +76,9 @@ func set_pos(mousePos: Vector2) -> void:
 	var relative_pos: Vector2 = mousePos - grid_position
 	# 四舍五入
 	var half_block := Global.GridSize / 2
-	var around_anchor: Vector2i = (relative_pos - size / 2 + Vector2(half_block, half_block)) as Vector2i
+	var around_anchor: Vector2i = (relative_pos - xy / 2 + Vector2(half_block, half_block)) as Vector2i
 	relative_pos = around_anchor / Global.GridSize * Global.GridSize
-	global_position = relative_pos + size / 2 + grid_position
+	global_position = relative_pos + xy / 2 + grid_position
 
 
 func _input(event: InputEvent) -> void:
@@ -78,21 +90,21 @@ func _input(event: InputEvent) -> void:
 func do_rotation() -> void:
 	var rotate_degree: int = data.rotate()
 	var tween = create_tween()
-	tween.tween_property(self, "rotation_degrees", rotate_degree, 0.05)
+	tween.tween_property(item_control, "rotation_degrees", rotate_degree, 0.05)
 	
 	# 限制角度范围在[0, 360)
 	tween.finished.connect(func():
-		rotation_degrees = rotate_degree % 360
+		item_control.rotation_degrees = rotate_degree % 360
 	)
 
 
 func do_move(target_position: Vector2 = Vector2i(0, 0), rotate_degree: int = 0) -> void:
 	# 移动动画
-	target_position += size / 2
+	target_position += xy / 2
 	var move_tween = create_tween()
 	move_tween.tween_property(self, "global_position", target_position, 0.05)
 	
 	# 旋转动画
 	var rotate_tween = create_tween()
-	rotate_tween.tween_property(self, "rotation_degrees", rotate_degree, 0.05)
+	rotate_tween.tween_property(item_control, "rotation_degrees", rotate_degree, 0.05)
 	

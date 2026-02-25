@@ -18,6 +18,8 @@ const backpack_upgrade_price: Array[int] = [0, 24000, 40000, 73000]
 # 最大堆叠数 TODO 最大堆叠数和具体物品绑定
 const max_item_stack: int = 50
 
+var something_pickup: bool = false
+
 
 ## 通过背包等级获取背包的尺寸
 func get_backpack_size(level: int) -> Vector2i:

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bmu1jai16na5m"]
 
 [ext_resource type="Texture2D" uid="uid://bigfw2sopeeuj" path="res://assets/格子.png" id="1_dxvxp"]
-[ext_resource type="Script" uid="uid://dh7nlcbb0xqry" path="res://scenes/backpack_slot.gd" id="2_56hww"]
+[ext_resource type="Script" uid="uid://dh7nlcbb0xqry" path="res://scripts/backpack/backpack_slot.gd" id="2_56hww"]
 
 [node name="BackpackSlot" type="TextureRect" unique_id=1279948046]
 custom_minimum_size = Vector2(16, 16)

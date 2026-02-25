@@ -31,6 +31,15 @@ enum ItemType {
 	NONE		= 3,	# 无类型
 }
 
+var stackable_type: Array = [ItemType.CONSUMABLE, ItemType.MATERIAL]
+
+## 判断物品能否堆叠
+func is_stackable() -> bool:
+	for t in stackable_type:
+		if t == item_type:
+			return true
+	return false
+
 
 ## 自定义排序函数 [br]
 ## 1. 物品类型优先级 eg: 武器 > 消耗品 [br]

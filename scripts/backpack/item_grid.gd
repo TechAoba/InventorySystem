@@ -1,36 +1,35 @@
 class_name ItemGrid extends GridContainer
 
 const SLOT_SIZE: int = Global.GridSize
-const backpack_slot_scene: PackedScene = preload("res://scenes/backpack_slot.tscn")
-var dimentions: Vector2i = Vector2i(10, 6)
-var slot_datas: Array[BackpackItem] = []
-var items: Array[BackpackItem] = []
+const backpackSlotScene_: PackedScene = preload("res://scenes/backpack_slot.tscn")
+
+var dimentions_: Vector2i = Vector2i(10, 6)
+var slotDatas_: Array[BackpackItem] = []
 
 func _ready() -> void:
 	#init_slot_data()
 	pass
 
-func init_slot_data(dim: Vector2i = dimentions) -> void:
-	self.dimentions = dim
-	slot_datas.resize(dim.x * dim.y)
+func init_slot_data(dim: Vector2i = dimentions_) -> void:
+	self.dimentions_ = dim
+	slotDatas_.resize(dim.x * dim.y)
 	reset_slots_()
-	slot_datas.fill(null)
-	items.clear()
+	slotDatas_.fill(null)
 
 ## 设置格子尺寸
 func reset_slots_() -> void:
-	self.columns = dimentions.x
+	self.columns = dimentions_.x
 	# 1. 清除背包中所有格子（背包列数发生改变，格子index到行列的映射关系发生变化）
 	for child in get_children():
 		if child is BackpackSlot:
 			child.queue_free()
 	# 2. 创建背包格子对象
-	for y in dimentions.y:
-		for x in dimentions.x:
-			var backpack_slot = backpack_slot_scene.instantiate() as BackpackSlot
-			backpack_slot.row = y
-			backpack_slot.column = x
-			add_child(backpack_slot)
+	for y in dimentions_.y:
+		for x in dimentions_.x:
+			var backpackSlot_ = backpackSlotScene_.instantiate() as BackpackSlot
+			backpackSlot_.row = y
+			backpackSlot_.column = x
+			add_child(backpackSlot_)
 
 
 func _gui_input(event: InputEvent) -> void:
@@ -40,52 +39,85 @@ func _gui_input(event: InputEvent) -> void:
 			# 当前鼠标未持有物体，检查点击位置物体，若存在则pickup，并在背包的格子中删除物体
 			if !held_item:
 				var slot_index = get_slot_index_from_coords(get_global_mouse_position())
-				var item: BackpackItem = slot_datas[slot_index]
+				var item: BackpackItem = slotDatas_[slot_index]
 				if !item:
 					return
 				item.get_picked_up(global_position)
 				remove_item_from_slot_data(item)
-			# 放置物体，放置位置无物体时直接放置；存在一个物体时则替出该物体
+			# 手上持有物品
 			else:
+				# 物品超过背包界限，直接返回
 				var offset = Vector2(SLOT_SIZE, SLOT_SIZE) / 2
 				var index = get_slot_index_from_coords(held_item.anchor_point + offset)
 				if !is_in_border(index, held_item.data.dimentions):
 					return
+				# 物品有重叠部分
 				var items = items_in_area(index, held_item.data.dimentions)
 				if items.size():
 					if items.size() == 1:
-						held_item.get_placed(get_global_mouse_position(), index)
-						remove_item_from_slot_data(items[0])
-						add_item_to_slot_data(index, held_item)
-						items[0].get_picked_up(global_position)
+						# 物品完全重合 & id相同 & 物品可堆叠
+						#print(items.values()[0] == held_item.data.in_backpack_attr.area)
+						#print(items.keys()[0].data.item_id == held_item.data.item_id)
+						#print(held_item.data.is_stackable())
+						if items.values()[0] == held_item.data.in_backpack_attr.area \
+						and items.keys()[0].data.item_id == held_item.data.item_id \
+						and held_item.data.is_stackable():
+							handle_merge(index)
+						else:
+							held_item.get_placed(get_global_mouse_position(), index)
+							remove_item_from_slot_data(items.keys()[0])
+							add_item_to_slot_data(index, held_item)
+							items.keys()[0].get_picked_up(global_position)
 					return
+				# 位置可直接放置
 				held_item.get_placed(get_global_mouse_position(), index)
 				add_item_to_slot_data(index, held_item)
 
 
+func handle_merge(slot_idx: int) -> void:
+	var held_item: BackpackItem = get_tree().get_first_node_in_group("held_item")
+	var item: BackpackItem = slotDatas_[slot_idx]
+	# 1. 如果物品可完全叠加到一起
+	if held_item.data.in_backpack_attr.stack_count \
+		+ item.data.in_backpack_attr.stack_count \
+		<= item.data.in_backpack_attr.max_stack_count:
+			item.data.in_backpack_attr.stack_count += held_item.data.in_backpack_attr.stack_count
+			Global.something_pickup = false
+			get_parent().remove_item(held_item)
+			held_item.queue_free()
+	# 2. 可叠加到上限，手上还剩部分物品
+	else:
+		held_item.data.in_backpack_attr.stack_count -= \
+		held_item.data.in_backpack_attr.max_stack_count - \
+		item.data.in_backpack_attr.stack_count
+		item.data.in_backpack_attr.stack_count = held_item.data.in_backpack_attr.max_stack_count
+
+
 func remove_item_from_slot_data(item: Node) -> void:
-	for i in slot_datas.size():
-		if slot_datas[i] == item:
-			slot_datas[i] = null
+	for i in slotDatas_.size():
+		if slotDatas_[i] == item:
+			slotDatas_[i] = null
 
 func add_item_to_slot_data(index: int, item: BackpackItem) -> void:
 	#print("add to: ", index)
 	for y in item.data.dimentions.y:
 		for x in item.data.dimentions.x:
-			slot_datas[index + x + y * columns] = item
+			slotDatas_[index + x + y * columns] = item
 	item.data.in_backpack_attr.slot_idx = index
 
-func items_in_area(index: int, item_dimentions: Vector2i) -> Array:
+func items_in_area(index: int, item_dimentions: Vector2i) -> Dictionary:
 	var items: Dictionary = {}
 	for y in item_dimentions.y:
 		for x in item_dimentions.x:
 			var slot_index = index + x + y * columns
-			var item = slot_datas[slot_index]
+			var item = slotDatas_[slot_index]
 			if !item:
 				continue
 			if !items.has(item):
-				items[item] = true
-	return items.keys() if items.size() else []
+				items[item] = 1
+			else:
+				items[item] += 1
+	return items
 
 
 func get_slot_index_from_coords(coords: Vector2i) -> int:
@@ -94,7 +126,7 @@ func get_slot_index_from_coords(coords: Vector2i) -> int:
 		return -1
 	coords = coords / SLOT_SIZE
 	var index = coords.x + coords.y * columns
-	if index > dimentions.x * dimentions.y || index < 0:
+	if index > dimentions_.x * dimentions_.y || index < 0:
 		return -1
 	return index
 
@@ -117,28 +149,20 @@ func attempt_to_add_item_data(item: BackpackItem) -> int:
 	# 2. 不在背包中
 	else:
 		# 首先尝试不旋转物品
-		while slot_index < slot_datas.size():
+		while slot_index < slotDatas_.size():
 			if item_fits(slot_index, item.data.dimentions):
 				break
 			slot_index += 1
-		## 不旋转物品无法放置，则尝试旋转放置
-		#if slot_index >= slot_datas.size():
-			#slot_index = 0
-			#while slot_index < slot_datas.size():
-				#if item_fits(slot_index, item.data.dimentions, true):
-					#break
-				#slot_index += 1
-			#if slot_index >= slot_datas.size():
-				#slot_index = -1
-	if slot_index >= slot_datas.size():
+	if slot_index >= slotDatas_.size():
 		slot_index = -1
 	# 当存在格子放置物品时，真正放置物品
 	if slot_index >= 0:
-		items.append(item)
 		add_item_to_slot_data(slot_index, item)
 		item.data.in_backpack_attr.is_placed = true
 		item.data.in_backpack_attr.slot_idx = slot_index
 		item.set_init_position(get_coords_from_slot_index(slot_index))
+		#var target_position: Vector2 = get_coords_from_slot_index(slot_index)
+		#item.do_move(target_position, item.data.in_backpack_attr.rotate_degree)
 	return slot_index
 
 
@@ -150,7 +174,7 @@ func item_fits(index: int, rect: Vector2i, do_rotation: bool = false) -> bool:
 	for y in rect.y:
 		for x in rect.x:
 			var curr_index = index + x + y * columns
-			if slot_datas[curr_index] != null:
+			if slotDatas_[curr_index] != null:
 				return false
 	return true
 
@@ -162,16 +186,16 @@ func is_in_border(index: int, rect: Vector2i) -> bool:
 		return false
 	var start_x = index % columns
 	var start_y = index / columns
-	if start_x + rect.x > dimentions.x or start_y + rect.y > dimentions.y:
+	if start_x + rect.x > dimentions_.x or start_y + rect.y > dimentions_.y:
 		return false
 	return true
 
 
 ## 一键整理背包后，根据物品的坐标。移动物品到正确的位置
-func move_item_by_packer() -> void:
+func move_item_by_packer(items: Array[BackpackItem]) -> void:
 	# 1. 清理 slot 上的 item 引用
-	for i in slot_datas.size():
-		slot_datas[i] = null
+	for i in slotDatas_.size():
+		slotDatas_[i] = null
 	for item in items:
 		# 2. 物品根据新放置在 slot 中
 		var slot_idx: int = columns * item.data.in_backpack_attr.y + item.data.in_backpack_attr.x

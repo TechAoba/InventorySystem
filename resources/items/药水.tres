@@ -6,14 +6,16 @@
 
 [sub_resource type="Resource" id="Resource_6q33j"]
 script = ExtResource("1_7i8c4")
+max_stack_count = 5
+stack_count = 2
 metadata/_custom_type_script = "uid://c56jbkdvxla8y"
 
 [resource]
 script = ExtResource("1_c77cl")
 item_id = "medicine"
 name = "药水"
-texture = ExtResource("2_ox2fi")
 item_type = 2
 description = "恢复少量生命值"
 in_backpack_attr = SubResource("Resource_6q33j")
+texture = ExtResource("2_ox2fi")
 metadata/_custom_type_script = "uid://bn33tpr4xnmc1"

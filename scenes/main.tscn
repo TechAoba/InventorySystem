@@ -35,7 +35,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="BackPack" type="PanelContainer" parent="." unique_id=1364709262]
+[node name="BackPack" type="Panel" parent="." unique_id=975613250]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 3.0
@@ -46,7 +46,9 @@ script = ExtResource("1_sugp2")
 
 [node name="ItemGrid" type="GridContainer" parent="BackPack" unique_id=1830978381]
 unique_name_in_owner = true
-layout_mode = 2
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 script = ExtResource("1_o5qli")

@@ -9,24 +9,24 @@ extends Resource
 ## 物品的尺寸
 @export var ori_width_pixel: int
 @export var ori_height_pixel: int
-@export var area: int
 ## 物品是否已放置在背包中
 @export var is_placed: bool = false
 ## 物品的旋转角度
 @export var rotate_degree: int
+## 最大叠加数量
+@export var max_stack_count: int = 1
 ## 物品堆叠数量
-@export var stack_count: int
+@export var stack_count: int = 1
 
 func _init(p_width_pixel: int = 0, p_height_pixel: int = 0,  
 		   p_x: int = 0, p_y: int = 0, p_stack_count: int = 1) -> void:
 	self.ori_width_pixel = p_width_pixel
 	self.ori_height_pixel = p_height_pixel
-	self.area = p_width_pixel * p_height_pixel
 	self.x = p_x
 	self.y = p_y
 	self.is_placed = false
 	self.rotate_degree = 0
-	self.stack_count = p_stack_count
+	#self.stack_count = p_stack_count
 
 
 # 旋转90度，避免物体反向旋转，特殊360值返回
@@ -88,3 +88,10 @@ var height: int:
 			return width_pixel
 		else:
 			return height_pixel
+
+
+## count of slots
+var area: int:
+	get():
+		var area: int = ori_width_pixel * ori_height_pixel
+		return area / (Global.GridSize * Global.GridSize)

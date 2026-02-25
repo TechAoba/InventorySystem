@@ -6,14 +6,15 @@
 
 [sub_resource type="Resource" id="Resource_ikwjs"]
 script = ExtResource("1_4w87a")
+max_stack_count = 3
 metadata/_custom_type_script = "uid://c56jbkdvxla8y"
 
 [resource]
 script = ExtResource("1_m5co2")
 item_id = "shield"
 name = "盾"
-texture = ExtResource("2_k8bke")
 item_type = 1
 description = "一把防御武器"
 in_backpack_attr = SubResource("Resource_ikwjs")
+texture = ExtResource("2_k8bke")
 metadata/_custom_type_script = "uid://dw6b2s7xwdq28"
