@@ -59,6 +59,16 @@ func get_dimention_in_backpack() -> Vector2i:
 	return Vector2i(width_pixel, height_pixel)
 
 
+func get_ori_dimention_in_backpack() -> Vector2i:
+	var slot_size: int = Global.GridSize
+	assert(ori_width_pixel % slot_size == 0 and ori_height_pixel % slot_size == 0)
+	var width_pixel := ori_width_pixel
+	var height_pixel := ori_height_pixel
+	width_pixel /= slot_size
+	height_pixel /= slot_size
+	return Vector2i(width_pixel, height_pixel)
+
+
 ## 返回矩形左下角和右上角点坐标
 func get_bounds() -> Rect2i:
 	return Rect2i(x, y, width, height)

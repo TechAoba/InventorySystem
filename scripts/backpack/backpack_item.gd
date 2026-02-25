@@ -28,8 +28,7 @@ func _ready() -> void:
 	if data:
 		texture_rect.texture = data.texture
 		color_rect.size = data.texture.get_size()
-		color_rect.position = -xy / 2
-		#item_control.size = data.texture.get_size()
+		color_rect.position = -data.in_backpack_attr.get_ori_dimention_in_backpack() * Global.GridSize as Vector2 / 2
 		# 渲染物品数量
 		count_label.visible = data.is_stackable()
 
@@ -40,8 +39,6 @@ func _process(delta: float) -> void:
 		set_pos(pos)
 	if data:
 		count_label.text = str(data.in_backpack_attr.stack_count)
-		#var yx := Vector2(xy.y, xy.y)
-		color_rect.position = -xy / 2
 
 # global_position为物体中心点，锚点anchor_point为物体左上角
 func set_init_position(anchor_pos: Vector2) -> void:

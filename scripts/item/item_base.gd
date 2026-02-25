@@ -22,7 +22,6 @@ class_name ItemBase extends Resource
 			in_backpack_attr.ori_height_pixel = texture.get_height()
 
 
-
 ## 物品类型
 enum ItemType {
 	WEAPON 		= 0,	# 武器
