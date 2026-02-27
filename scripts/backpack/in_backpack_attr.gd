@@ -45,18 +45,21 @@ func set_idx(p_idx: int) -> void:
 	self.idx = p_idx
 
 
-func get_dimention_in_backpack() -> Vector2i:
+func get_size_in_backpack() -> Vector2i:
 	var slot_size: int = Global.GridSize
 	assert(ori_width_pixel % slot_size == 0 and ori_height_pixel % slot_size == 0)
 	var width_pixel := ori_width_pixel
 	var height_pixel := ori_height_pixel
-	width_pixel /= slot_size
-	height_pixel /= slot_size
 	if rotate_degree % 180 == 90:
 		var temp := width_pixel
 		width_pixel = height_pixel
 		height_pixel = temp
 	return Vector2i(width_pixel, height_pixel)
+
+
+func get_dimention_in_backpack() -> Vector2i:
+	var pixel_size := get_size_in_backpack() / Global.GridSize
+	return pixel_size
 
 
 func get_ori_dimention_in_backpack() -> Vector2i:

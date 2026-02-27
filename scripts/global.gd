@@ -1,7 +1,5 @@
 extends Node
 
-@onready var item_grid: ItemGrid = %ItemGrid
-
 # 背包格子像素
 const GridSize: int = 32
 # 背包格子解锁上限

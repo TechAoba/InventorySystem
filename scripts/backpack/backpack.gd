@@ -1,6 +1,7 @@
 class_name Backpack extends Panel
 
 @onready var item_grid: ItemGrid = %ItemGrid
+@onready var highlight_box: ColorRect = %HighlightBox
 @export var items: Array[ItemBase] = []
 
 const SAVE_PATH = "user://backpack_save.tres"
@@ -12,6 +13,11 @@ var data_: BackpackData
 ## 背包整理器
 var packer_: BinManager = null
 
+## 选择物品高亮 相关配置
+const SelectRectColor := Color(1, 1, 1, 0.3)
+var highlight_pos_ := Vector2(0, 0)
+var highlight_size_ := Vector2(0, 0)
+
 
 func _ready() -> void:
 	data_ = BackpackData.new()
@@ -19,7 +25,11 @@ func _ready() -> void:
 	var backpack_size: Vector2i = data_.get_backpack_size()
 	item_grid.init_slot_data(backpack_size)
 	load_()
-	
+	# 物品高亮
+	highlight_box.color = SelectRectColor
+	highlight_box.z_index = 20
+	set_highlight_box()		# 设置为初始值
+
 
 ## 保存数据
 func save_() -> bool:
@@ -117,12 +127,7 @@ func upgrade_() -> void:
 	# 3. 更新背包格子的dimentions
 	item_grid.init_slot_data(new_dimention)
 	
-	# 4. 过滤掉free的物品（合并）
-	#backpackItems_ = backpackItems_.filter(func(item):
-		#return is_instance_valid(item)
-	#)
-	
-	# 5. 将物品放置背包
+	# 4. 将物品放置背包
 	for backpack_item in backpackItems_:
 		var grid_index: int = item_grid.attempt_to_add_item_data(backpack_item)
 
@@ -151,12 +156,65 @@ func pack_backpack_() -> void:
 		item_grid.move_item_by_packer(backpackItems_)
 
 
+func set_highlight_box(pos: Vector2 = highlight_pos_, size: Vector2 = highlight_size_) -> void:
+	highlight_box.position = pos
+	highlight_box.size = size
+
+
+## 获取 方向键 触发的方向
+func get_keyboard_direction_() -> Vector2i:
+	if Input.is_action_just_pressed("left"):
+		return Vector2i(-1, 0)
+	elif Input.is_action_just_pressed("up"):
+		return Vector2i(0, -1)
+	elif Input.is_action_just_pressed("right"):
+		return Vector2i(1, 0)
+	elif Input.is_action_just_pressed("down"):
+		return Vector2i(0, 1)
+	return Vector2i(0, 0)
+
+
 func _input(event: InputEvent) -> void:
-	# 按下 R 键触发整理背包 & 没有物品被点击拾起
-	if event is InputEventKey and Input.is_action_just_pressed("pack"):
-		if !Global.something_pickup:
-			pack_backpack_()
-	# 按下 P 键触发拾取物品
-	elif event is InputEventKey and Input.is_action_just_pressed("pickup"):
-		pickup_item_()
-	
+	# --- 键盘事件 ---
+	if event is InputEventKey:
+		if event is InputEventKey and Input.is_action_just_pressed("tab"):
+			if Global.something_pickup:
+				var held_item: BackpackItem = get_tree().get_first_node_in_group("held_item")
+				held_item.do_rotation(self)
+		# 按下 R 键触发整理背包 & 没有物品被点击拾起
+		if Input.is_action_just_pressed("pack"):
+			if !Global.something_pickup:
+				pack_backpack_()
+		# 按下 P 键触发拾取物品
+		elif Input.is_action_just_pressed("pickup"):
+			pickup_item_()
+		elif Input.is_action_just_pressed("left") or Input.is_action_just_pressed("up") \
+		or Input.is_action_just_pressed("right") or Input.is_action_just_pressed("down"):
+			Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
+			var direction: Vector2i = get_keyboard_direction_()
+			var highlight_pos_size := item_grid.get_highlight_box_by_keyboard(highlight_pos_, highlight_size_, direction)
+			highlight_pos_ = highlight_pos_size[0]
+			highlight_size_ = highlight_pos_size[1]
+			set_highlight_box()
+		# 确认键，拾起/放置物品
+		elif Input.is_action_just_pressed("confirm"):
+			item_grid.confirm_item(highlight_pos_, highlight_size_)
+	# --- 鼠标移动事件 ---
+	elif event is InputEventMouseMotion:
+		update_highlight_by_mouse()
+		
+
+func update_highlight_by_mouse() -> void:
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	var highlight_pos_size := item_grid.get_highlight_box()
+	highlight_pos_ = highlight_pos_size[0]
+	highlight_size_ = highlight_pos_size[1]
+	set_highlight_box()
+
+
+func update_highlight_by_held_item() -> void:
+	if Global.something_pickup:
+		var held_item: BackpackItem = get_tree().get_first_node_in_group("held_item")
+		highlight_pos_ = held_item.global_position - held_item.xy / 2.0 - item_grid.global_position
+		highlight_size_ = held_item.xy
+		set_highlight_box()

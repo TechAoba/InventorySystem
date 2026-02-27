@@ -35,8 +35,9 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if is_picked:
-		var pos := get_global_mouse_position()
-		set_pos(pos)
+		if Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
+			var pos := get_global_mouse_position()
+			set_pos(pos)
 	if data:
 		count_label.text = str(data.in_backpack_attr.stack_count)
 
@@ -48,10 +49,14 @@ func set_init_position(anchor_pos: Vector2) -> void:
 
 func get_picked_up(grid_position: Vector2) -> void:
 	self.grid_position = grid_position
+	data.in_backpack_attr.is_placed = false
 	add_to_group("held_item")
 	is_picked = true
 	z_index = 10
 	Global.something_pickup = true
+	if Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
+		var pos := get_global_mouse_position()
+		set_pos(pos)
 
 
 ## 放置物品 [br]
@@ -78,13 +83,8 @@ func set_pos(mousePos: Vector2) -> void:
 	global_position = relative_pos + xy / 2 + grid_position
 
 
-func _input(event: InputEvent) -> void:
-	if event is InputEventKey and Input.is_action_just_pressed("tab"):
-		if is_picked:
-			do_rotation()
-
-
-func do_rotation() -> void:
+func do_rotation(node = null) -> void:
+	var last_anchor_point := anchor_point
 	var rotate_degree: int = data.rotate()
 	var tween = create_tween()
 	tween.tween_property(item_control, "rotation_degrees", rotate_degree, 0.05)
@@ -92,6 +92,13 @@ func do_rotation() -> void:
 	# 限制角度范围在[0, 360)
 	tween.finished.connect(func():
 		item_control.rotation_degrees = rotate_degree % 360
+		# 键盘旋转，需确保旋转后以左上角点对齐
+		if Input.mouse_mode == Input.MOUSE_MODE_HIDDEN:
+			var target_pos: Vector2 = last_anchor_point + xy / 2
+			set_pos(target_pos)
+		# 旋转后，更新高亮矩形
+		if node != null:
+			node.update_highlight_by_held_item()
 	)
 
 
