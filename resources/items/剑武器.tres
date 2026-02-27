@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ItemWeapon" format=3 uid="uid://fxq5y4gn7dv0"]
+
+[ext_resource type="Script" uid="uid://dw6b2s7xwdq28" path="res://scripts/item/item_weapon.gd" id="1_0dngd"]
+[ext_resource type="Script" uid="uid://c56jbkdvxla8y" path="res://scripts/backpack/in_backpack_attr.gd" id="1_xdlyx"]
+[ext_resource type="Texture2D" uid="uid://wf8mp6ckxk4o" path="res://assets/剑.png" id="3_wxobg"]
+
+[sub_resource type="Resource" id="Resource_u1saq"]
+script = ExtResource("1_xdlyx")
+metadata/_custom_type_script = "uid://c56jbkdvxla8y"
+
+[resource]
+script = ExtResource("1_0dngd")
+item_id = "sword"
+name = "剑"
+item_type = 0
+description = "手持武器，伤害高"
+in_backpack_attr = SubResource("Resource_u1saq")
+texture = ExtResource("3_wxobg")
+metadata/_custom_type_script = "uid://dw6b2s7xwdq28"

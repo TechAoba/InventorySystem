@@ -296,7 +296,7 @@ func get_highlight_box_by_keyboard(currentPos: Vector2, currentSize: Vector2, di
 		highlight_box.append(next_pos)
 		highlight_box.append(currentSize)
 		# 设置物品的位置
-		held_item.set_pos(next_pos + self.global_position + held_item.color_rect.size / 2.0)
+		held_item.set_pos(next_pos + self.global_position + held_item.xy / 2.0)
 		
 	return highlight_box
 	

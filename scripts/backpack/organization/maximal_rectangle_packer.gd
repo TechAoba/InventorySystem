@@ -13,12 +13,14 @@ var free_rects: Array[FreeRectangle] = []
 
 var score_func_: Callable
 
-func _init(width: int, height: int, rotation: bool = false, heuristic: String = "best_area"):
+func _init(width: int, height: int, rotation: bool = false, heuristic: String = "best_shortside"):
 	self.bin_width = width
 	self.bin_height = height
 	self.free_area = width * height
 	self.rotation = rotation
-	
+	#print("bin_width: ", bin_width)
+	#print("bin_height: ", bin_height)
+	#print("algo: ", heuristic)
 	match heuristic:
 		"best_area": 		score_func_ = Heuristics.scoreBAF
 		"best_shortside":  	score_func_ = Heuristics.scoreBSSF

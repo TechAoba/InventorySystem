@@ -22,7 +22,7 @@ func _init(
 	p_bin_height: int = 6,
 	p_bin_algo: String = "bin_best_fit",
 	p_pack_algo: String = "maximal_rectangle",
-	p_heuristic: String = "best_area",
+	p_heuristic: String = "best_shortside",
 	p_split_heuristic: String = "default",
 	p_rotation: bool = true,
 	p_rectangle_merge: bool = true,

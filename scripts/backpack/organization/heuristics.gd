@@ -5,7 +5,8 @@ static func scoreBAF(rect: FreeRectangle, item: ItemBase, packer) -> Array:
 			min(rect.width - item.in_backpack_attr.width, rect.height - item.in_backpack_attr.height)]
 
 static func scoreBSSF(rect: FreeRectangle, item: ItemBase, packer) -> Array:
-	return [min(rect.width - item.in_backpack_attr.width, rect.height - item.in_backpack_attr.height), max(rect.width - item.in_backpack_attr.width, rect.height - item.in_backpack_attr.height)]
+	return [min(rect.width - item.in_backpack_attr.width, rect.height - item.in_backpack_attr.height), 
+			max(rect.width - item.in_backpack_attr.width, rect.height - item.in_backpack_attr.height)]
 
 static func scoreBLSF(rect: FreeRectangle, item: ItemBase, packer) -> Array:
 	return [max(rect.width - item.in_backpack_attr.width, rect.height - item.in_backpack_attr.height), min(rect.width - item.in_backpack_attr.width, rect.height - item.in_backpack_attr.height)]

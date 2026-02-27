@@ -5,6 +5,7 @@ extends Node
 	"axe": "res://resources/items/斧头武器.tres",
 	"shield": "res://resources/items/盾武器.tres",
 	"medicine": "res://resources/items/药水.tres",
+	"sword": "res://resources/items/剑武器.tres",
 }
 
 # 资源缓存：已加载的物品资源，避免重复load
