@@ -7,6 +7,10 @@ const backpackSlotScene_: PackedScene = preload("res://scenes/backpack_slot.tscn
 var dimentions_: Vector2i = Vector2i(10, 6)
 var slotDatas_: Array[BackpackItem] = []
 
+# 用于追踪当前批次有多少物品完成了动画
+var batch_items_total_: int = 0
+var batch_items_finished_: int = 0
+
 func _ready() -> void:
 	#init_slot_data()
 	pass
@@ -199,22 +203,38 @@ func is_in_border(index: int, rect: Vector2i) -> bool:
 
 ## 一键整理背包后，根据物品的坐标。移动物品到正确的位置
 func move_item_by_packer(items: Array[BackpackItem]) -> void:
+	if items.is_empty():
+		return
 	# 1. 清理 slot 上的 item 引用
 	for i in slotDatas_.size():
 		slotDatas_[i] = null
+	# 初始化批次计数器
+	batch_items_total_ = items.size()
+	batch_items_finished_ = 0
 	for item in items:
+		item.animation_finished.connect(on_single_item_finished_.bind(item))
 		# 2. 物品根据新放置在 slot 中
 		var slot_idx: int = columns * item.data.in_backpack_attr.y + item.data.in_backpack_attr.x
 		add_item_to_slot_data(slot_idx, item)
 		# 3. 计算物品的绝对位置并移动到对应位置
 		var target_position: Vector2 = get_coords_from_slot_index(slot_idx)
 		item.do_move(target_position, item.data.in_backpack_attr.rotate_degree)
-	
+
+
+# 单个物品动画完成的回调
+func on_single_item_finished_(finished_item: BackpackItem):
+	batch_items_finished_ += 1
+	# 【可选】断开信号连接，防止内存泄漏或重复触发（虽然 bind 了参数通常比较安全，但断开是好习惯）
+	finished_item.animation_finished.disconnect(on_single_item_finished_.bind(finished_item))
+	# 检查是否全部完成
+	if batch_items_finished_ >= batch_items_total_:
+		get_parent().update_highlight_by_self_pos()
+
 
 ## 通过鼠标的 global_position 计算背包续高亮矩形的 位置 和 尺寸
-func get_highlight_box() -> Array:
+func get_highlight_box_by_pos(pos: Vector2) -> Array:
 	var highlight_box: Array = []
-	var slot_idx: int = get_slot_index_from_coords(get_global_mouse_position())
+	var slot_idx: int = get_slot_index_from_coords(pos)
 	# 1. 未拾取物品
 	if !Global.something_pickup:
 		# 在空格子上

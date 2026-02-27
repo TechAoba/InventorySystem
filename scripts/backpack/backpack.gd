@@ -201,12 +201,12 @@ func _input(event: InputEvent) -> void:
 			item_grid.confirm_item(highlight_pos_, highlight_size_)
 	# --- 鼠标移动事件 ---
 	elif event is InputEventMouseMotion:
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		update_highlight_by_mouse()
 		
 
 func update_highlight_by_mouse() -> void:
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	var highlight_pos_size := item_grid.get_highlight_box()
+	var highlight_pos_size := item_grid.get_highlight_box_by_pos(get_global_mouse_position())
 	highlight_pos_ = highlight_pos_size[0]
 	highlight_size_ = highlight_pos_size[1]
 	set_highlight_box()
@@ -218,3 +218,11 @@ func update_highlight_by_held_item() -> void:
 		highlight_pos_ = held_item.global_position - held_item.xy / 2.0 - item_grid.global_position
 		highlight_size_ = held_item.xy
 		set_highlight_box()
+
+
+func update_highlight_by_self_pos() -> void:
+	var pos: Vector2 = highlight_pos_ + Vector2(Global.GridSize / 2, Global.GridSize / 2)
+	var highlight_pos_size := item_grid.get_highlight_box_by_pos(pos)
+	highlight_pos_ = highlight_pos_size[0]
+	highlight_size_ = highlight_pos_size[1]
+	set_highlight_box()

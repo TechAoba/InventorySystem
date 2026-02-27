@@ -4,7 +4,10 @@ class_name BackpackItem extends Control
 @onready var color_rect: ColorRect = %ColorRect
 @onready var count_label: Label = %CountLabel
 @onready var texture_rect: TextureRect = %TextureRect
-
+# 定义信号，通知item_grid “所有动画结束”
+signal animation_finished
+# 内部计数器，记录当前还有几个动画在跑
+var active_tween_count_: int = 0
 
 var data: ItemBase = null
 var is_picked: bool = false
@@ -103,12 +106,24 @@ func do_rotation(node = null) -> void:
 
 
 func do_move(target_position: Vector2 = Vector2i(0, 0), rotate_degree: int = 0) -> void:
-	# 移动动画
+	active_tween_count_ = 0 
+	# --- 移动动画 ---
+	active_tween_count_ += 1
 	target_position += xy / 2
 	var move_tween = create_tween()
 	move_tween.tween_property(self, "global_position", target_position, 0.05)
+	move_tween.tween_callback(on_internal_tween_finished_)
 	
-	# 旋转动画
+	# --- 旋转动画 ---
+	active_tween_count_ += 1
 	var rotate_tween = create_tween()
 	rotate_tween.tween_property(item_control, "rotation_degrees", rotate_degree, 0.05)
+	rotate_tween.tween_callback(on_internal_tween_finished_)
 	
+	
+func on_internal_tween_finished_() -> void:
+	active_tween_count_ -= 1
+	if active_tween_count_ <= 0:
+		# 所有动画都完成了，发射信号通知外部
+		animation_finished.emit()
+		active_tween_count_ = 0 # 重置
